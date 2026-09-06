@@ -1,0 +1,28 @@
+.official-hotspots { max-width: 1200px; margin: 0 auto; }
+.official-hotspots__header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--spacing-xl); flex-wrap: wrap; gap: var(--spacing-md); }
+.official-hotspots__title { font-size: var(--font-size-2xl); font-weight: var(--font-weight-semibold); color: var(--color-text-primary); margin: 0 0 var(--spacing-xs); }
+.official-hotspots__subtitle { font-size: var(--font-size-base); color: var(--color-text-secondary); margin: 0; }
+.official-hotspots__header-actions { display: flex; gap: var(--spacing-sm); }
+.official-hotspots__controls { margin-bottom: var(--spacing-xl); }
+.hotspots-controls__grid { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: var(--spacing-md); align-items: end; }
+.filter-group { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.filter-group--checkbox { display: flex; align-items: end; }
+.checkbox-label { display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-sm); color: var(--color-text-primary); cursor: pointer; }
+.checkbox-label input { width: 16px; height: 16px; accent-color: var(--color-primary); }
+.official-hotspots__map-section { margin-bottom: var(--spacing-xl); }
+.official-hotspots__map-card { /* card base */ }
+.official-hotspots__legend { margin-top: var(--spacing-xl); }
+.official-hotspots__legend-card { /* card base */ }
+.legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-xl); }
+.legend-section__title { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--color-text-primary); margin: 0 0 var(--spacing-md); text-transform: uppercase; letter-spacing: 0.05em; }
+.legend-items { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.legend-item { display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+.legend-marker { width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2); flex-shrink: 0; }
+.marker-lg { width: 18px; height: 18px; background: radial-gradient(circle at 30% 30%, var(--color-primary), var(--color-primary-dark)); }
+.marker-md { width: 14px; height: 14px; background: radial-gradient(circle at 30% 30%, var(--color-primary), var(--color-primary-dark)); }
+.marker-sm { width: 10px; height: 10px; background: radial-gradient(circle at 30% 30%, var(--color-primary), var(--color-primary-dark)); }
+.legend-hotspot-list { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.legend-hotspot { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-sm) var(--spacing-md); background-color: var(--color-background); border-radius: var(--radius-small); font-size: var(--font-size-sm); }
+.legend-hotspot__disease { font-weight: var(--font-weight-medium); color: var(--color-text-primary); }
+.legend-hotspot__count { color: var(--color-text-secondary); }
+@media (max-width: 640px) { .hotspots-controls__grid { grid-template-columns: 1fr; } .filter-group--checkbox { justify-content: flex-start; } .official-hotspots__header { flex-direction: column; align-items: stretch; } .official-hotspots__header-actions { justify-content: flex-end; } }

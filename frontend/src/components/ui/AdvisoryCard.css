@@ -1,0 +1,119 @@
+.advisory-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-large);
+  overflow: hidden;
+}
+
+.advisory-card__header {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border-light);
+  background-color: var(--color-background);
+}
+
+.advisory-card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.advisory-card__subtitle {
+  margin: 0;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.advisory-card__disease {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.advisory-card__crop {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.advisory-card__separator {
+  margin: 0 var(--spacing-sm);
+  color: var(--color-text-muted);
+}
+
+.advisory-card__sections {
+  padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+.advisory-card__section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.advisory-card__section:last-child {
+  margin-bottom: 0;
+}
+
+.advisory-card__section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-medium);
+  border-left: 4px solid;
+  margin-bottom: var(--spacing-md);
+}
+
+.advisory-card__section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.advisory-card__section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.advisory-card__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.advisory-card__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-background);
+  border-radius: var(--radius-small);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-primary);
+}
+
+.advisory-card__item::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+.advisory-card__empty {
+  padding: var(--spacing-2xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.advisory-card__empty p {
+  margin: 0;
+}

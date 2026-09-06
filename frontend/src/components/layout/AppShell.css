@@ -1,0 +1,69 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+.app-shell__main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  transition: margin-left var(--transition-normal);
+}
+
+.app-shell__content {
+  flex: 1;
+  padding: var(--spacing-xl);
+  min-height: calc(100vh - var(--header-height));
+}
+
+@media (max-width: 1024px) {
+  .app-shell__main {
+    margin-left: 0 !important;
+  }
+
+  .app-shell__content {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell__content {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Page transition animations */
+.app-shell__content > * {
+  animation: page-fade-in var(--transition-normal) ease;
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus visible for skip links */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-small);
+  font-weight: var(--font-weight-medium);
+  z-index: var(--z-index-toast);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+}
