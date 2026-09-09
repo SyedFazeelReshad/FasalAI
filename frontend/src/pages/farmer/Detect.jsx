@@ -8,29 +8,50 @@ import { ImageUploader } from '../../components/ui/ImageUploader';
 import { mockFarms, mockCrops } from '../../data/mockData';
 import './Detect.css';
 
+const API_BASE = 'http://localhost:8000/api/v1';
+
 const Detect = () => {
   const navigate = useNavigate();
   const [selectedFarm, setSelectedFarm] = useState('');
   const [selectedCrop, setSelectedCrop] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
-  const [step, setStep] = useState('upload'); // upload, analyzing, result
+  const [step, setStep] = useState('upload');
+  const [error, setError] = useState(null);
 
   const handleAnalyze = useCallback(async () => {
     if (!selectedFarm || !selectedCrop || !uploadedImage) return;
-    
+
     setAnalyzing(true);
     setStep('analyzing');
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    setAnalyzing(false);
-    setStep('result');
-    
-    // Navigate to result page with mock case ID
-    const mockCaseId = `case-${Date.now()}`;
-    navigate(`/farmer/detection/result/${mockCaseId}`);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', uploadedImage);
+      formData.append('crop', selectedCrop);
+
+      const response = await fetch(`${API_BASE}/predict`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Server error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      
+      setAnalyzing(false);
+      
+      // Navigate to result page with prediction data in state
+      navigate(`/farmer/detection/result/new`, { state: { prediction: result } });
+    } catch (err) {
+      setAnalyzing(false);
+      setStep('upload');
+      setError(err.message || 'Failed to analyze image. Please try again.');
+    }
   }, [selectedFarm, selectedCrop, uploadedImage, navigate]);
 
   const handleImageChange = useCallback((files) => {
@@ -76,6 +97,16 @@ const Detect = () => {
           <p className="detect-page__subtitle">Upload a crop image for AI health assessment</p>
         </div>
       </header>
+
+      {error && (
+        <div className="detect-page__error-banner" role="alert">
+          <AlertTriangle size={20} aria-hidden="true" />
+          <span>{error}</span>
+          <Button variant="ghost" size="sm" onClick={() => setError(null)}>
+            <X size={16} aria-hidden="true" />
+          </Button>
+        </div>
+      )}
 
       {step === 'upload' && (
         <form className="detect-page__form" onSubmit={(e) => { e.preventDefault(); handleAnalyze(); }}>
@@ -198,34 +229,6 @@ const Detect = () => {
                 </div>
               </div>
               <p className="analyzing-card__note">This usually takes 10-30 seconds</p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {step === 'result' && (
-        <Card variant="elevated" className="detect-page__result-card">
-          <CardContent>
-            <div className="result-card">
-              <div className="result-card__success">
-                <div className="result-card__success-icon">
-                  <CheckCircle size={48} aria-hidden="true" />
-                </div>
-                <h2 className="result-card__title">Analysis Complete!</h2>
-                <p className="result-card__description">Your crop image has been analyzed. View the AI assessment and advisory.</p>
-              </div>
-              <div className="result-card__actions">
-                <Link to={`/farmer/detection/result/case-${Date.now()}`}>
-                  <Button variant="primary" size="lg">
-                    View Results
-                    <ArrowLeft size={18} style={{ transform: 'rotate(180deg)' }} aria-hidden="true" />
-                  </Button>
-                </Link>
-                <Button variant="outline" size="lg" onClick={() => setStep('upload')}>
-                  <X size={18} aria-hidden="true" />
-                  New Analysis
-                </Button>
-              </div>
             </div>
           </CardContent>
         </Card>

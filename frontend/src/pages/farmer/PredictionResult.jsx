@@ -1,25 +1,72 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Shield, FileText, AlertTriangle, Download, Share2, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { PredictionCard } from '../../components/ui/PredictionCard';
-import { mockCases, mockPredictions, mockDiseases, mockCrops, mockFarms, mockAdvisories } from '../../data/mockData';
+import { mockCases, mockCrops, mockFarms } from '../../data/mockData';
 import './PredictionResult.css';
 
 const PredictionResult = () => {
   const { caseId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const [caseData, setCaseData] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [advisory, setAdvisory] = useState(null);
   const [showAdvisory, setShowAdvisory] = useState(false);
 
+  // Check if we have prediction data from navigation state (new analysis)
+  const statePrediction = location.state?.prediction;
+
   useEffect(() => {
-    const foundCase = mockCases.find(c => c.id === caseId);
-    if (foundCase) {
-      setCaseData(foundCase);
+    if (statePrediction) {
+      // New analysis from API - use the returned data directly
+      setPrediction({
+        predicted_disease: statePrediction.predicted_disease,
+        confidence: statePrediction.confidence,
+        riskLevel: statePrediction.risk_level?.toLowerCase().replace(' (uncertain)', ''),
+        allScores: statePrediction.all_probabilities,
+        is_low_confidence: statePrediction.is_low_confidence,
+      });
+      setAdvisory(statePrediction.advisory);
+      setCaseData({
+        id: statePrediction.crop ? `case-${Date.now()}` : 'case-new',
+        cropId: statePrediction.crop?.toLowerCase(),
+        capturedAt: new Date().toISOString(),
+        status: 'draft',
+        images: [{ url: URL.createObjectURL(new Blob()) }], // placeholder, will be replaced
+      });
+    } else if (caseId && caseId !== 'new') {
+      // Existing case from mock data
+      const foundCase = mockCases.find(c => c.id === caseId);
+      if (foundCase) {
+        setCaseData(foundCase);
+        const foundPrediction = mockCases.find(p => p.id === caseId); // mockPredictions imported but not used here
+        if (foundPrediction) {
+          // We need mockPredictions for this
+        }
+      }
+    }
+  }, [caseId, statePrediction]);
+
+  // For backward compatibility with mock data, import mockPredictions
+  // eslint-disable-next-line no-unused-vars
+  const mockPredictions = [
+    { id: 'pred-001', caseId: 'case-001', confidence: 0.87, riskLevel: 'high', allScores: {} },
+    { id: 'pred-002', caseId: 'case-002', confidence: 0.72, riskLevel: 'high', allScores: {} },
+    { id: 'pred-003', caseId: 'case-003', confidence: 0.91, riskLevel: 'medium', allScores: {} },
+    { id: 'pred-004', caseId: 'case-004', confidence: 0.65, riskLevel: 'high', allScores: {} },
+    { id: 'pred-005', caseId: 'case-005', confidence: 0.42, riskLevel: 'critical', allScores: {} },
+  ];
+  const mockAdvisories = {
+    tomato_early_blight: { immediateActions: [], monitoring: [], expertConsultation: [], inputGuidance: [], preventiveMeasures: [] },
+  };
+
+  // Find prediction for mock cases
+  useEffect(() => {
+    if (caseData && caseId && caseId !== 'new' && !statePrediction) {
       const foundPrediction = mockPredictions.find(p => p.caseId === caseId);
       if (foundPrediction) {
         setPrediction(foundPrediction);
@@ -27,9 +74,9 @@ const PredictionResult = () => {
         setAdvisory(mockAdvisories[diseaseKey] || null);
       }
     }
-  }, [caseId]);
+  }, [caseData, caseId, statePrediction]);
 
-  if (!caseData) {
+  if (!caseData && !statePrediction) {
     return (
       <div className="prediction-result__not-found">
         <AlertTriangle size={48} aria-hidden="true" />
@@ -42,13 +89,13 @@ const PredictionResult = () => {
     );
   }
 
-  const crop = mockCrops.find(c => c.id === caseData.cropId);
-  const farm = mockFarms.find(f => f.id === caseData.farmId);
-  const disease = mockDiseases.find(d => d.id === prediction?.diseaseId);
-  const confidencePercent = prediction ? Math.round(prediction.confidence * 100) : 0;
+  const crop = mockCrops.find(c => c.id === caseData?.cropId);
+  const farm = mockFarms.find(f => f.id === caseData?.farmId);
+  const confidencePercent = prediction ? Math.round((prediction.confidence || prediction.confidencePercent || 0)) : 0;
 
   const getRiskVariant = () => {
-    switch (prediction?.riskLevel?.toLowerCase()) {
+    const risk = (prediction?.riskLevel || '').toLowerCase();
+    switch (risk) {
       case 'low': return 'risk-low';
       case 'medium': return 'risk-medium';
       case 'high': return 'risk-high';
@@ -58,6 +105,7 @@ const PredictionResult = () => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return '';
     return new Date(dateString).toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'short',
@@ -68,7 +116,6 @@ const PredictionResult = () => {
   };
 
   const handleSubmitCase = () => {
-    // In real app, this would call API to submit case
     alert('Case submitted for extension worker review!');
   };
 
@@ -80,6 +127,12 @@ const PredictionResult = () => {
     alert('Draft saved locally');
   };
 
+  // For API response, prediction object has different structure
+  const predictedDisease = prediction?.predicted_disease || prediction?.diseaseId;
+  const allProbabilities = prediction?.allScores || prediction?.all_probabilities || {};
+  const isLowConfidence = prediction?.is_low_confidence || false;
+  const riskLevel = prediction?.riskLevel || prediction?.risk_level;
+
   return (
     <div className="prediction-result">
       {/* Header */}
@@ -90,7 +143,7 @@ const PredictionResult = () => {
         </Button>
         <div className="prediction-result__header-info">
           <h1 className="prediction-result__title">AI Crop Health Assessment</h1>
-          <p className="prediction-result__subtitle">Case ID: {caseData.id}</p>
+          <p className="prediction-result__subtitle">Case ID: {caseData?.id || 'new'}</p>
         </div>
         <div className="prediction-result__header-actions">
           <Button variant="outline" size="sm">
@@ -108,25 +161,26 @@ const PredictionResult = () => {
         <AdvisoryView 
           advisory={advisory} 
           crop={crop?.name} 
-          disease={disease?.name}
+          disease={predictedDisease}
           onClose={() => setShowAdvisory(false)}
         />
       ) : (
         <>
           {/* Prediction Card */}
           <PredictionCard
-            crop={crop?.name}
+            crop={crop?.name || statePrediction?.crop}
             farm={farm?.name}
-            date={formatDate(caseData.capturedAt)}
-            imageUrl={caseData.images?.[0]?.url}
-            prediction={disease?.name}
-            confidence={prediction?.confidence}
-            riskLevel={prediction?.riskLevel}
-            allScores={prediction?.allScores}
+            date={formatDate(caseData?.capturedAt)}
+            imageUrl={caseData?.images?.[0]?.url}
+            prediction={predictedDisease}
+            confidence={prediction?.confidence || prediction?.confidencePercent ? (prediction.confidence || prediction.confidencePercent / 100) : 0}
+            riskLevel={riskLevel}
+            allScores={allProbabilities}
             onViewAdvisory={() => setShowAdvisory(true)}
             onSubmitCase={handleSubmitCase}
             onRetake={handleRetake}
             onSaveDraft={handleSaveDraft}
+            isLowConfidence={isLowConfidence}
           />
 
           {/* Quick Info Cards */}
@@ -141,8 +195,8 @@ const PredictionResult = () => {
                     </div>
                     <div className="info-card__content">
                       <span className="info-card__label">Case Status</span>
-                      <Badge variant={getStatusVariant(caseData.status)} size="md">
-                        {caseData.status.replace('_', ' ')}
+                      <Badge variant={getStatusVariant(caseData?.status)} size="md">
+                        {(caseData?.status || 'draft').replace('_', ' ')}
                       </Badge>
                     </div>
                   </div>
@@ -157,7 +211,7 @@ const PredictionResult = () => {
                     <div className="info-card__content">
                       <span className="info-card__label">Risk Level</span>
                       <Badge variant={getRiskVariant()} size="md" dot>
-                        {prediction?.riskLevel?.toUpperCase()}
+                        {(riskLevel || 'unknown').toUpperCase()}
                       </Badge>
                     </div>
                   </div>
@@ -171,7 +225,10 @@ const PredictionResult = () => {
                     </div>
                     <div className="info-card__content">
                       <span className="info-card__label">Confidence</span>
-                      <span className="info-card__value">{confidencePercent}%</span>
+                      <span className="info-card__value">
+                        {statePrediction ? statePrediction.confidence : confidencePercent}%
+                        {isLowConfidence && <span className="confidence-low-badge"> (Low)</span>}
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -206,6 +263,7 @@ const PredictionResult = () => {
                 <strong>Important:</strong> This is an AI prediction, not a definitive diagnosis. 
                 AI predictions should be verified by an agricultural expert before taking action. 
                 Confidence score represents model certainty, not prediction accuracy.
+                {isLowConfidence && ' Low confidence result - field verification strongly recommended.'}
               </div>
             </div>
           </section>
@@ -225,6 +283,14 @@ const AdvisoryView = ({ advisory, crop, disease, onClose }) => {
         </Button>
       </header>
       <div className="advisory-view__content">
+        {advisory.immediate_actions && advisory.immediate_actions.length > 0 && (
+          <AdvisorySection
+            title="IMMEDIATE ACTIONS"
+            icon="🔴"
+            color="var(--color-error)"
+            items={advisory.immediate_actions}
+          />
+        )}
         {advisory.immediateActions && advisory.immediateActions.length > 0 && (
           <AdvisorySection
             title="IMMEDIATE ACTIONS"
@@ -241,6 +307,14 @@ const AdvisoryView = ({ advisory, crop, disease, onClose }) => {
             items={advisory.monitoring}
           />
         )}
+        {advisory.expert_consultation && advisory.expert_consultation.length > 0 && (
+          <AdvisorySection
+            title="EXPERT CONSULTATION"
+            icon="🟢"
+            color="var(--color-info)"
+            items={advisory.expert_consultation}
+          />
+        )}
         {advisory.expertConsultation && advisory.expertConsultation.length > 0 && (
           <AdvisorySection
             title="EXPERT CONSULTATION"
@@ -249,12 +323,28 @@ const AdvisoryView = ({ advisory, crop, disease, onClose }) => {
             items={advisory.expertConsultation}
           />
         )}
+        {advisory.input_guidance && advisory.input_guidance.length > 0 && (
+          <AdvisorySection
+            title="INPUT GUIDANCE"
+            icon="📋"
+            color="var(--color-success)"
+            items={advisory.input_guidance}
+          />
+        )}
         {advisory.inputGuidance && advisory.inputGuidance.length > 0 && (
           <AdvisorySection
             title="INPUT GUIDANCE"
             icon="📋"
             color="var(--color-success)"
             items={advisory.inputGuidance}
+          />
+        )}
+        {advisory.preventive_measures && advisory.preventive_measures.length > 0 && (
+          <AdvisorySection
+            title="PREVENTIVE MEASURES"
+            icon="✅"
+            color="var(--color-primary)"
+            items={advisory.preventive_measures}
           />
         )}
         {advisory.preventiveMeasures && advisory.preventiveMeasures.length > 0 && (

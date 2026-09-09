@@ -57,12 +57,14 @@ export const mockFarms = [
 ];
 
 export const mockCrops = [
+  { id: 'cotton', code: 'cotton', name: 'Cotton', scientificName: 'Gossypium hirsutum', iconUrl: null },
   { id: 'tomato', code: 'tomato', name: 'Tomato', scientificName: 'Solanum lycopersicum', iconUrl: null },
   { id: 'maize', code: 'maize', name: 'Maize', scientificName: 'Zea mays', iconUrl: null },
   { id: 'grape', code: 'grape', name: 'Grape', scientificName: 'Vitis vinifera', iconUrl: null },
   { id: 'rice', code: 'rice', name: 'Rice', scientificName: 'Oryza sativa', iconUrl: null },
-  { id: 'wheat', code: 'wheat', name: 'Wheat', scientificName: 'Triticum aestivum', iconUrl: null },
-  { id: 'cotton', code: 'cotton', name: 'Cotton', scientificName: 'Gossypium hirsutum', iconUrl: null }
+  { id: 'potato', code: 'potato', name: 'Potato', scientificName: 'Solanum tuberosum', iconUrl: null },
+  { id: 'sugarcane', code: 'sugarcane', name: 'Sugarcane', scientificName: 'Saccharum officinarum', iconUrl: null },
+  { id: 'mango', code: 'mango', name: 'Mango', scientificName: 'Mangifera indica', iconUrl: null }
 ];
 
 export const mockDiseases = [
