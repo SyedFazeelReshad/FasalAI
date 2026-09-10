@@ -1,4 +1,4 @@
-import io
+﻿import io
 import json
 import os
 from pathlib import Path
@@ -39,7 +39,7 @@ def _get_crop_key(crop_name: str) -> Optional[str]:
     normalized = crop_name.strip().lower().replace(" ", "_")
     if normalized in CROP_MODEL_MAP:
         return normalized
-    if normalized == "mango_fruit":
+    if normalized in ["mango_fruit", "mango"]:
         return "mango_fruit"
     return None
 
