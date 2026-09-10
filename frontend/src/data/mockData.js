@@ -1,4 +1,4 @@
-// FasalAI Mock Data - Centralized for easy replacement with real API data
+﻿// FasalAI Mock Data - Centralized for easy replacement with real API data
 
 export const mockUser = {
   id: 'usr-001',
@@ -53,6 +53,66 @@ export const mockFarms = [
     irrigationType: 'Drip',
     isActive: true,
     createdAt: '2025-04-10T08:00:00Z'
+  },
+  {
+    id: 'farm-004',
+    userId: 'usr-001',
+    name: 'Central Field',
+    location: { lat: 28.6250, lng: 77.2200 },
+    address: 'Village Khampur, Delhi',
+    primaryCropId: 'cotton',
+    soilType: 'Black Soil',
+    irrigationType: 'Drip',
+    isActive: true,
+    createdAt: '2025-05-01T08:00:00Z'
+  },
+  {
+    id: 'farm-005',
+    userId: 'usr-001',
+    name: 'Delta Acres',
+    location: { lat: 28.6300, lng: 77.2250 },
+    address: 'Village Khampur, Delhi',
+    primaryCropId: 'rice',
+    soilType: 'Clay',
+    irrigationType: 'Flood',
+    isActive: true,
+    createdAt: '2025-05-10T08:00:00Z'
+  },
+  {
+    id: 'farm-006',
+    userId: 'usr-001',
+    name: 'Valley Farm',
+    location: { lat: 28.6350, lng: 77.2300 },
+    address: 'Village Khampur, Delhi',
+    primaryCropId: 'sugarcane',
+    soilType: 'Loamy',
+    irrigationType: 'Furrow',
+    isActive: true,
+    createdAt: '2025-05-15T08:00:00Z'
+  },
+  {
+    id: 'farm-007',
+    userId: 'usr-001',
+    name: 'Highland Field',
+    location: { lat: 28.6400, lng: 77.2350 },
+    address: 'Village Khampur, Delhi',
+    primaryCropId: 'potato',
+    soilType: 'Sandy Loam',
+    irrigationType: 'Sprinkler',
+    isActive: true,
+    createdAt: '2025-05-20T08:00:00Z'
+  },
+  {
+    id: 'farm-008',
+    userId: 'usr-001',
+    name: 'Sunrise Orchard',
+    location: { lat: 28.6450, lng: 77.2400 },
+    address: 'Village Khampur, Delhi',
+    primaryCropId: 'mango',
+    soilType: 'Alluvial',
+    irrigationType: 'Drip',
+    isActive: true,
+    createdAt: '2025-06-01T08:00:00Z'
   }
 ];
 
@@ -61,6 +121,11 @@ export const mockCrops = [
   { id: 'tomato', code: 'tomato', name: 'Tomato', scientificName: 'Solanum lycopersicum', iconUrl: null },
   { id: 'maize', code: 'maize', name: 'Maize', scientificName: 'Zea mays', iconUrl: null },
   { id: 'grape', code: 'grape', name: 'Grape', scientificName: 'Vitis vinifera', iconUrl: null },
+  { id: 'cotton', code: 'cotton', name: 'Cotton', scientificName: 'Gossypium', iconUrl: null },
+  { id: 'rice', code: 'rice', name: 'Rice', scientificName: 'Oryza sativa', iconUrl: null },
+  { id: 'sugarcane', code: 'sugarcane', name: 'Sugarcane', scientificName: 'Saccharum officinarum', iconUrl: null },
+  { id: 'potato', code: 'potato', name: 'Potato', scientificName: 'Solanum tuberosum', iconUrl: null },
+  { id: 'mango', code: 'mango', name: 'Mango', scientificName: 'Mangifera indica', iconUrl: null },
   { id: 'rice', code: 'rice', name: 'Rice', scientificName: 'Oryza sativa', iconUrl: null },
   { id: 'potato', code: 'potato', name: 'Potato', scientificName: 'Solanum tuberosum', iconUrl: null },
   { id: 'sugarcane', code: 'sugarcane', name: 'Sugarcane', scientificName: 'Saccharum officinarum', iconUrl: null },
@@ -483,3 +548,4 @@ export const mockOfficialCases = mockCases.map(c => ({
   extensionWorker: 'Priya Sharma',
   verificationStatus: c.status === 'verified' ? 'Verified' : c.status === 'under_review' ? 'Under Review' : 'Pending'
 }));
+

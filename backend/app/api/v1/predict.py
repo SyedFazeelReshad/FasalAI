@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, Form, UploadFile, HTTPException
+﻿from fastapi import APIRouter, File, Form, UploadFile, HTTPException
 from typing import Dict, Any
 
 from app.services.ml_service import predict_crop_disease
@@ -138,7 +138,7 @@ async def predict(file: UploadFile = File(...), crop: str = Form(...)):
         "crop": crop,
         "predicted_disease": predicted_class,
         "confidence": confidence,
-        "risk_level": advisory["risk_level"],
+        "risk_level": advisory.get("risk_level", "medium"),
         "is_low_confidence": is_low_confidence,
         "advisory": {
             "symptoms": advisory["symptoms"],
