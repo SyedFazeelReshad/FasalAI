@@ -1,3 +1,4 @@
+import { useTranslation } from '../../i18n/LanguageContext';
 import { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Camera, Image as ImageIcon, ArrowLeft, HelpCircle, AlertTriangle, CheckCircle, X } from 'lucide-react';
@@ -12,6 +13,7 @@ const API_BASE = 'http://localhost:8000/api/v1';
 
 const Detect = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [selectedFarm, setSelectedFarm] = useState('');
   const [selectedCrop, setSelectedCrop] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -90,11 +92,11 @@ const Detect = () => {
       <header className="detect-page__header">
         <Button variant="ghost" size="sm" onClick={handleBack} className="detect-page__back-btn">
           <ArrowLeft size={18} aria-hidden="true" />
-          <span>Back</span>
+          <span>{t('btn_back')}</span>
         </Button>
         <div className="detect-page__title-section">
-          <h1 className="detect-page__title">Detect Crop Disease</h1>
-          <p className="detect-page__subtitle">Upload a crop image for AI health assessment</p>
+          <h1 className="detect-page__title">{t('farmer_portal_title')}</h1>
+          <p className="detect-page__subtitle">{t('farmer_portal_sub')}</p>
         </div>
       </header>
 
@@ -113,18 +115,19 @@ const Detect = () => {
           {/* Farm Selector */}
           <Card variant="outlined" className="detect-page__card">
             <CardHeader>
-              <CardTitle>Select Farm</CardTitle>
-              <CardSubtitle>Choose the farm where the image was taken</CardSubtitle>
+              <CardTitle>{t('section_select_farm')}</CardTitle>
+              <CardSubtitle>{t('section_select_farm_sub')}</CardSubtitle>
             </CardHeader>
             <CardContent>
               <Select
-                label="Farm"
-                placeholder="Select a farm"
-                options={farmOptions}
+                id="farm-select"
+                label={t('field_farm')}
                 value={selectedFarm}
                 onChange={(e) => setSelectedFarm(e.target.value)}
+                options={farmOptions}
+                placeholder={t('placeholder_select_farm')}
                 required
-                helperText="Farm location helps with weather-based risk assessment"
+                helpText={t('help_farm_location')}
               />
             </CardContent>
           </Card>
@@ -132,18 +135,19 @@ const Detect = () => {
           {/* Crop Selector */}
           <Card variant="outlined" className="detect-page__card">
             <CardHeader>
-              <CardTitle>Select Crop</CardTitle>
-              <CardSubtitle>Choose the crop type for accurate disease detection</CardSubtitle>
+              <CardTitle>{t('section_select_crop')}</CardTitle>
+              <CardSubtitle>{t('section_select_crop_sub')}</CardSubtitle>
             </CardHeader>
             <CardContent>
               <Select
-                label="Crop"
-                placeholder="Select crop type"
-                options={cropOptions}
+                id="crop-select"
+                label={t('field_crop')}
                 value={selectedCrop}
                 onChange={(e) => setSelectedCrop(e.target.value)}
+                options={cropOptions}
+                placeholder={t('placeholder_select_crop')}
                 required
-                helperText="AI model uses crop-specific detection heads"
+                helpText={t('help_crop_model')}
               />
             </CardContent>
           </Card>
@@ -151,16 +155,16 @@ const Detect = () => {
           {/* Image Upload */}
           <Card variant="outlined" className="detect-page__card">
             <CardHeader>
-              <CardTitle>Upload Crop Image</CardTitle>
-              <CardSubtitle>Clear, well-lit photos of affected leaves give best results</CardSubtitle>
+              <CardTitle>{t('section_upload_image')}</CardTitle>
+              <CardSubtitle>{t('section_upload_image_sub')}</CardSubtitle>
             </CardHeader>
             <CardContent>
               <ImageUploader
                 value={uploadedImage}
                 onChange={handleImageChange}
                 onRemove={handleRemoveImage}
-                label="Upload crop image"
-                helperText="Drag & drop or click to upload (JPG, PNG, WebP, max 10MB)"
+                label={t('upload_box_title')}
+                helperText={t('upload_box_sub')}
                 showPreview={true}
               />
             </CardContent>
@@ -191,12 +195,12 @@ const Detect = () => {
               {analyzing ? (
                 <>
                   <span className="btn__spinner" aria-hidden="true" />
-                  Analyzing...
+                  {t('btn_analyzing')}
                 </>
               ) : (
                 <>
                   <Camera size={20} aria-hidden="true" />
-                  Analyze Image
+                  {t('btn_diagnose')}
                 </>
               )}
             </Button>

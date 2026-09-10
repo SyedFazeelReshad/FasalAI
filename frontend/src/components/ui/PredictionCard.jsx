@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+﻿import { forwardRef } from 'react';
 import { AlertTriangle, Shield, ExternalLink } from 'lucide-react';
 import { Badge } from './Badge';
 import { Button } from './Button';
@@ -37,7 +37,10 @@ const PredictionCard = forwardRef(({
     return 'Very Low';
   };
 
-  const confidencePercent = Math.round(confidence * 100);
+    const numConf = Number(confidence) || 0;
+  const normalizedVal = numConf > 1 ? numConf : numConf * 100;
+  const displayConfidence = normalizedVal.toFixed(2);
+  const confidencePercent = Math.min(100, Math.max(0, normalizedVal));
 
   return (
     <div ref={ref} className={`prediction-card ${className}`} {...props}>
@@ -75,7 +78,7 @@ const PredictionCard = forwardRef(({
         <div className="prediction-card__confidence">
           <div className="prediction-card__confidence-row">
             <span className="prediction-card__confidence-label">Confidence:</span>
-            <span className="prediction-card__confidence-value">{confidencePercent}%</span>
+            <span className="prediction-card__confidence-value">{displayConfidence}%</span>
           </div>
           <div className="prediction-card__confidence-bar">
             <div 
@@ -110,7 +113,7 @@ const PredictionCard = forwardRef(({
                 .map(([key, score]) => (
                   <div key={key} className="prediction-card__score-item">
                     <span className="prediction-card__score-name">{key}</span>
-                    <span className="prediction-card__score-value">{Math.round(score * 100)}%</span>
+                    <span className="prediction-card__score-value">{(Number(score) > 1 ? Number(score) : Number(score) * 100).toFixed(2)}%</span>
                   </div>
                 ))}
             </div>

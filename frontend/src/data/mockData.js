@@ -156,7 +156,7 @@ export const mockCases = [
     cropId: 'tomato',
     status: 'verified',
     images: [
-      { url: 'https://images.unsplash.com/photo-1592841200221-6e4e3c2f0d4b?w=800', thumbnailUrl: 'https://images.unsplash.com/photo-1592841200221-6e4e3c2f0d4b?w=300', isPrimary: true }
+      { url: '/diseases/case-tomato-early-blight.jpg', thumbnailUrl: '/diseases/case-tomato-early-blight.jpg', isPrimary: true }
     ],
     location: { lat: 28.6139, lng: 77.2090 },
     capturedAt: '2026-08-25T10:30:00Z',
@@ -172,7 +172,7 @@ export const mockCases = [
     cropId: 'tomato',
     status: 'under_review',
     images: [
-      { url: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=800', thumbnailUrl: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=300', isPrimary: true }
+      { url: '/diseases/case-tomato-late-blight.webp', thumbnailUrl: '/diseases/case-tomato-late-blight.webp', isPrimary: true }
     ],
     location: { lat: 28.6145, lng: 77.2095 },
     capturedAt: '2026-09-01T08:15:00Z',
@@ -187,7 +187,7 @@ export const mockCases = [
     cropId: 'maize',
     status: 'verified',
     images: [
-      { url: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800', thumbnailUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300', isPrimary: true }
+      { url: '/diseases/case-maize-rust.jpeg', thumbnailUrl: '/diseases/case-maize-rust.jpeg', isPrimary: true }
     ],
     location: { lat: 28.6200, lng: 77.2150 },
     capturedAt: '2026-08-20T14:00:00Z',
@@ -203,7 +203,7 @@ export const mockCases = [
     cropId: 'grape',
     status: 'submitted',
     images: [
-      { url: 'https://images.unsplash.com/photo-1537640138216-f591a950b660?w=800', thumbnailUrl: 'https://images.unsplash.com/photo-1537640138216-f591a950b660?w=300', isPrimary: true }
+      { url: '/diseases/case-grape-black-rot.jpg', thumbnailUrl: '/diseases/case-grape-black-rot.jpg', isPrimary: true }
     ],
     location: { lat: 28.6050, lng: 77.2000 },
     capturedAt: '2026-09-03T16:45:00Z',
@@ -218,7 +218,7 @@ export const mockCases = [
     cropId: 'tomato',
     status: 'rejected',
     images: [
-      { url: 'https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=800', thumbnailUrl: 'https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=300', isPrimary: true }
+      { url: '/diseases/case-tomato-bacterial-spot.webp', thumbnailUrl: '/diseases/case-tomato-bacterial-spot.webp', isPrimary: true }
     ],
     location: { lat: 28.6139, lng: 77.2090 },
     capturedAt: '2026-08-15T11:00:00Z',
